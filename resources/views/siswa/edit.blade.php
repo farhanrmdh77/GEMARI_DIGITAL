@@ -92,7 +92,7 @@
                     <div class="sm:col-span-2">
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Unit Penempatan / Divisi Magang</label>
                         <select name="unit_penempatan" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all cursor-pointer">
-                            <option value="" disabled>Pilih Unit Penempatan</option>
+                            <option value="">-- Belum Diketahui / Kosongkan --</option>
                             <option value="Subbagian SDM" {{ (old('unit_penempatan', $siswa->unit_penempatan) == 'Subbagian SDM') ? 'selected' : '' }}>Subbagian SDM</option>
                             <option value="Subbagian Umum dan TI" {{ (old('unit_penempatan', $siswa->unit_penempatan) == 'Subbagian Umum dan TI') ? 'selected' : '' }}>Subbagian Umum dan TI</option>
                             <option value="Subbagian Keuangan" {{ (old('unit_penempatan', $siswa->unit_penempatan) == 'Subbagian Keuangan') ? 'selected' : '' }}>Subbagian Keuangan</option>

@@ -52,9 +52,9 @@
                     
                     <tr><td colspan="3"><div class="h-4"></div></td></tr>
                     
-                    <tr><td class="kolom-label">Asal Instansi</td><td class="kolom-titik">:</td><td class="font-bold">{{ $data->asal_sekolah ?? $data->asal_kampus }}</td></tr>
-                    <tr><td class="kolom-label">Jurusan / Program Studi</td><td class="kolom-titik">:</td><td>{{ $data->jurusan ?? $data->prodi }}</td></tr>
-                    <tr><td class="kolom-label">Unit Penempatan (Divisi)</td><td class="kolom-titik">:</td><td class="font-bold">{{ $data->unit_penempatan }}</td></tr>
+                    <tr><td class="kolom-label">Asal Instansi</td><td class="kolom-titik">:</td><td class="font-bold">{{ $data->asal_sekolah ?? $data->asal_kampus ?? '-' }}</td></tr>
+                    <tr><td class="kolom-label">Jurusan / Program Studi</td><td class="kolom-titik">:</td><td>{{ $data->jurusan ?? $data->prodi ?? '-' }}</td></tr>
+                    <tr><td class="kolom-label">Unit Penempatan (Divisi)</td><td class="kolom-titik">:</td><td class="font-bold">{{ $data->unit_penempatan ?: '-' }}</td></tr>
                     <tr><td class="kolom-label">Periode Pelaksanaan</td><td class="kolom-titik">:</td>
                         <td>
                             {{ $data->tgl_mulai ? \Carbon\Carbon::parse($data->tgl_mulai)->locale('id')->translatedFormat('d F Y') : '-' }} 

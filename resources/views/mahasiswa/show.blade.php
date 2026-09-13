@@ -123,7 +123,7 @@
                 </div>
                 <div class="sm:col-span-2">
                     <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Unit Penempatan / Divisi</p>
-                    <p class="text-sm font-medium text-slate-800">{{ $mahasiswa->unit_penempatan }}</p>
+                    <p class="text-sm font-medium text-slate-800">{{ $mahasiswa->unit_penempatan ?: '-' }}</p>
                 </div>
                 <div>
                     <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Pembimbing Lapangan</p>
@@ -132,9 +132,9 @@
                 <div>
                     <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Periode Pelaksanaan</p>
                     <p class="text-sm font-medium text-slate-800">
-                        {{ $mahasiswa->tgl_mulai ? \Carbon\Carbon::parse($mahasiswa->tgl_mulai)->format('d M Y') : 'Belum diatur' }} 
+                        {{ $mahasiswa->tgl_mulai ? \Carbon\Carbon::parse($mahasiswa->tgl_mulai)->translatedFormat('d M Y') : 'Belum diatur' }} 
                         <span class="text-slate-400 font-normal mx-1">s/d</span> 
-                        {{ $mahasiswa->tgl_selesai ? \Carbon\Carbon::parse($mahasiswa->tgl_selesai)->format('d M Y') : 'Belum diatur' }}
+                        {{ $mahasiswa->tgl_selesai ? \Carbon\Carbon::parse($mahasiswa->tgl_selesai)->translatedFormat('d M Y') : 'Belum diatur' }}
                     </p>
                 </div>
             </div>
@@ -151,7 +151,7 @@
                     <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Tempat, Tanggal Lahir</p>
                     <p class="text-sm font-medium text-slate-800">
                         {{ $mahasiswa->tempat_lahir ?? '-' }}, 
-                        {{ $mahasiswa->tanggal_lahir ? \Carbon\Carbon::parse($mahasiswa->tanggal_lahir)->format('d F Y') : '-' }}
+                        {{ $mahasiswa->tanggal_lahir ? \Carbon\Carbon::parse($mahasiswa->tanggal_lahir)->translatedFormat('d F Y') : '-' }}
                     </p>
                 </div>
                 <div>
