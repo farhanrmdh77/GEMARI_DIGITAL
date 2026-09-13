@@ -42,7 +42,7 @@
             <div class="flex-1 text-[14px]">
                 <table class="w-full">
                     <tr><td class="kolom-label">Nama Lengkap</td><td class="kolom-titik">:</td><td>{{ $data->nama }}</td></tr>
-                    <tr><td class="kolom-label">{{ isset($data->nim) ? 'NIM' : 'NIS' }}</td><td class="kolom-titik">:</td><td>{{ $data->nis ?? $data->nim }}</td></tr>
+                    <tr><td class="kolom-label">{{ $data instanceof \App\Mahasiswa ? 'NIM' : 'NIS' }}</td><td class="kolom-titik">:</td><td>{{ $data->nis ?? $data->nim ?? '-' }}</td></tr>
                     <tr><td class="kolom-label">Tempat, Tanggal Lahir</td><td class="kolom-titik">:</td><td>{{ $data->tempat_lahir ?? '-' }}, {{ $data->tanggal_lahir ? \Carbon\Carbon::parse($data->tanggal_lahir)->locale('id')->translatedFormat('d F Y') : '-' }}</td></tr>
                     <tr><td class="kolom-label">Jenis Kelamin</td><td class="kolom-titik">:</td><td>{{ $data->jenis_kelamin == 'L' ? 'Laki-laki' : ($data->jenis_kelamin == 'P' ? 'Perempuan' : '-') }}</td></tr>
 
@@ -80,7 +80,7 @@
             <div class="text-center">
                 <p class="mb-20">Jambi, {{ \Carbon\Carbon::now('Asia/Jakarta')->locale('id')->translatedFormat('d F Y') }}<br>Peserta Magang,</p>
                 <p class="font-bold underline">{{ $data->nama }}</p>
-                <p>{{ isset($data->nim) ? 'NIM.' : 'NIS.' }} {{ $data->nis ?? $data->nim }}</p>
+                <p>{{ $data instanceof \App\Mahasiswa ? 'NIM.' : 'NIS.' }} {{ $data->nis ?? $data->nim ?? '-' }}</p>
             </div>
         </div>
     </div>

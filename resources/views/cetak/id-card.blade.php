@@ -56,7 +56,7 @@
 
         <!-- Foto Profil -->
         <!-- FOTO DITAIKKAN: Margin negatif disesuaikan proporsional -->
-        <div class="w-[22mm] h-[28mm] bg-slate-100 rounded-md border-[2px] border-white shadow-md relative -mt-[6mm] z-20 overflow-hidden flex items-center justify-center">
+        <div class="w-[22mm] h-[28mm] bg-slate-100 rounded-md border-[2px] border-white shadow-md relative -mt-[5mm] z-20 overflow-hidden flex items-center justify-center">
             @if($data->pas_foto)
                 <img src="{{ asset('storage/' . $data->pas_foto) }}" alt="Foto" class="w-full h-full object-cover">
             @else
@@ -69,7 +69,7 @@
             <p class="text-[8px] font-bold text-amber-600 tracking-widest uppercase mb-1 font-['Montserrat']">PESERTA MAGANG</p>
             
             <h1 class="text-[11px] font-bold text-slate-800 leading-tight mb-0.5">{{ $data->nama }}</h1>
-            <p class="text-[8px] text-slate-500 font-semibold mb-1.5">{{ isset($data->nim) ? 'NIM. ' : 'NIS. ' }}{{ $data->nis ?? $data->nim }}</p>
+            <p class="text-[8px] text-slate-500 font-semibold mb-1.5">{{ $data instanceof \App\Mahasiswa ? 'NIM. ' : 'NIS. ' }}{{ $data->nis ?? $data->nim ?? '-' }}</p>
 
             <div class="w-6 h-[1.5px] bg-amber-500 mx-auto mb-1.5"></div>
 
