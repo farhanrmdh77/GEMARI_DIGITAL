@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'SI-LOKO') - BPK Provinsi Jambi</title>
+    <title>@yield('title', 'GEMARI DIGITAL') - BPK Provinsi Jambi</title>
     
     <!-- Import Font Geist & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -49,10 +49,10 @@
         
         <!-- Header Sidebar: Logo & Title -->
         <div class="px-6 py-8 flex items-center gap-4 border-b border-white/5">
-            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo SI-LOKO" class="w-14 h-14 object-contain">
+            <img src="{{ asset('assets/img/logo.png') }}" alt="Logo GEMARI DIGITAL" class="w-14 h-14 object-contain">
             <div class="flex flex-col">
-                <span class="font-geist font-bold text-[19px] text-white tracking-wide leading-tight">SI-LOKO</span>
-                <span class="font-inter text-[9.5px] font-medium text-white/70 leading-tight mt-0.5">Sistem Informasi Log<br>Operasional & Kegiatan Organisasi</span>
+                <span class="font-geist font-bold text-[19px] text-white tracking-wide leading-tight">GEMARI DIGITAL</span>
+                <span class="font-inter text-[9.5px] font-medium text-white/70 leading-tight mt-0.5">Manajemen PKL & Magang<br>Digital BPK Jambi</span>
             </div>
         </div>
 
@@ -214,3 +214,5 @@
     </script>
 </body>
 </html>
+
+

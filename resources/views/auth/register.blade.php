@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="{{ asset('assets/img/logo.png') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar - SI-LOKO BPK Prov. Jambi</title>
+    <title>Daftar - GEMARI DIGITAL BPK Prov. Jambi</title>
     
     <!-- Import Font Geist & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -66,13 +66,13 @@
                     BPK Perwakilan Provinsi Jambi
                 </h3>
                 
-                <!-- Gradient Text SI-LOKO -->
+                <!-- Gradient Text GEMARI DIGITAL -->
                 <h1 class="text-5xl sm:text-7xl font-black font-geist tracking-wide mb-6 text-transparent bg-clip-text bg-gradient-to-b from-white to-teal-400 drop-shadow-sm pb-1">
-                    SI-LOKO
+                    GEMARI DIGITAL
                 </h1>
                 
                 <p class="text-white/80 font-inter text-base sm:text-lg max-w-md mx-auto leading-relaxed">
-                    Sistem Informasi Log Operasional dan Kegiatan Organisasi
+                    Manajemen PKL & Magang Digital
                 </p>
             </div>
         </div>
@@ -166,3 +166,5 @@
     @include('components.toast')
 </body>
 </html>
+
+
