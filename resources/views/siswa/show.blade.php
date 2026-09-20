@@ -60,12 +60,15 @@
     </div>
 </div>
 
-<!-- Layout Profil -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Layout Profil: 3 Card Design -->
+
+<!-- BARIS 1: Card 1 (Profil & Kontak) dan Card 2 (Biodata & Program Magang) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
     
-    <!-- Kolom Kiri: Foto & Ringkasan -->
-    <div class="md:col-span-1 space-y-6">
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 flex flex-col items-center text-center">
+    <!-- CARD 1: Profil, Kontak & Alamat (Kiri) -->
+    <div class="md:col-span-1 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 h-full flex flex-col">
+        <!-- Bagian Foto & Status -->
+        <div class="flex flex-col items-center text-center mb-6 pb-6 border-b border-slate-100">
             <div class="w-32 h-40 bg-[#eaf1ff] border border-slate-200 rounded-xl mb-4 relative overflow-hidden flex items-center justify-center shadow-inner">
                 @if($siswa->pas_foto)
                     <img src="{{ asset('storage/' . $siswa->pas_foto) }}" alt="Foto" class="w-full h-full object-cover">
@@ -83,8 +86,8 @@
             </div>
         </div>
 
-        <!-- Kartu Kontak Pribadi -->
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+        <!-- Bagian Kontak & Alamat -->
+        <div class="mt-auto">
             <h3 class="text-sm font-bold font-geist text-slate-800 mb-4 border-b border-slate-100 pb-2">Kontak & Alamat</h3>
             <ul class="space-y-4 font-inter text-sm">
                 <li class="flex items-start gap-3 text-slate-600">
@@ -103,10 +106,40 @@
         </div>
     </div>
 
-    <!-- Kolom Kanan: Detail Informasi -->
-    <div class="md:col-span-2 space-y-6">
+    <!-- CARD 2: Biodata & Program Magang (Kanan) -->
+    <div class="md:col-span-2 bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8 flex flex-col gap-8 h-full">
         
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8">
+        <!-- Bagian Biodata Pribadi -->
+        <div>
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-lg font-bold font-geist text-primary flex items-center gap-2 mb-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    Biodata Pribadi
+                </h3>
+                <span class="text-xs font-bold px-3 py-1 rounded-full {{ ($siswa->jenis_magang ?? 'Reguler') == 'Berbayar' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700' }}">{{ $siswa->jenis_magang ?? 'Reguler' }}</span>
+            </div>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 font-inter">
+                <div>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Tempat, Tanggal Lahir</p>
+                    <p class="text-sm font-medium text-slate-800">
+                        {{ $siswa->tempat_lahir ?? '-' }}, 
+                        {{ $siswa->tanggal_lahir ? \Carbon\Carbon::parse($siswa->tanggal_lahir)->translatedFormat('d F Y') : '-' }}
+                    </p>
+                </div>
+                <div>
+                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Jenis Kelamin</p>
+                    <p class="text-sm font-medium text-slate-800">
+                        {{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : ($siswa->jenis_kelamin == 'P' ? 'Perempuan' : '-') }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="border-t border-slate-100"></div>
+
+        <!-- Bagian Program Magang -->
+        <div>
             <h3 class="text-lg font-bold font-geist text-primary mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                 Detail Program Magang
@@ -139,31 +172,79 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8">
+<!-- BARIS 2: CARD 3 (Dokumen & Catatan, Full Width) -->
+<div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+        
+        <!-- Bagian Dokumen Upload -->
+        <div class="md:pr-8">
             <h3 class="text-lg font-bold font-geist text-primary mb-6 flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
-                Biodata Pribadi
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Dokumen Upload User
             </h3>
             
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8 font-inter">
-                <div>
-                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Tempat, Tanggal Lahir</p>
-                    <p class="text-sm font-medium text-slate-800">
-                        {{ $siswa->tempat_lahir ?? '-' }}, 
-                        {{ $siswa->tanggal_lahir ? \Carbon\Carbon::parse($siswa->tanggal_lahir)->translatedFormat('d F Y') : '-' }}
-                    </p>
-                </div>
-                <div>
-                    <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Jenis Kelamin</p>
-                    <p class="text-sm font-medium text-slate-800">
-                        {{ $siswa->jenis_kelamin == 'L' ? 'Laki-laki' : ($siswa->jenis_kelamin == 'P' ? 'Perempuan' : '-') }}
-                    </p>
-                </div>
+            <div class="grid grid-cols-1 gap-4 font-inter">
+                
+                <!-- File Card: Surat Permohonan -->
+                @if($siswa->surat_permohonan)
+                    <a href="{{ route('dokumen.view', ['path' => $siswa->surat_permohonan]) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-blue-300 hover:shadow-sm hover:bg-white transition-all group cursor-pointer" title="Lihat Dokumen">
+                @else
+                    <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl transition-all opacity-75">
+                @endif
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800 group-hover:text-blue-600 transition-colors">Surat Permohonan</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ $siswa->surat_permohonan ? 'Dokumen PDF' : 'Belum Diupload' }}</p>
+                        </div>
+                    </div>
+                    @if($siswa->surat_permohonan)
+                        <div class="p-2 text-slate-400 group-hover:text-blue-600 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                    </a>
+                    @else
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-2 py-1 rounded">Kosong</span>
+                    </div>
+                    @endif
+
+                <!-- File Card: Laporan Magang -->
+                @if($siswa->laporan_magang)
+                    <a href="{{ route('dokumen.view', ['path' => $siswa->laporan_magang]) }}" target="_blank" class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl hover:border-green-300 hover:shadow-sm hover:bg-white transition-all group cursor-pointer" title="Lihat Dokumen">
+                @else
+                    <div class="flex items-center justify-between p-4 bg-slate-50 border border-slate-200 rounded-xl transition-all opacity-75">
+                @endif
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-green-100 text-green-600 flex items-center justify-center shrink-0">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        </div>
+                        <div>
+                            <p class="text-sm font-bold text-slate-800 group-hover:text-green-600 transition-colors">Laporan Magang</p>
+                            <p class="text-xs text-slate-500 mt-0.5">{{ $siswa->laporan_magang ? 'Dokumen PDF' : 'Belum Diupload' }}</p>
+                        </div>
+                    </div>
+                    @if($siswa->laporan_magang)
+                        <div class="p-2 text-slate-400 group-hover:text-green-600 rounded-lg transition-colors">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                        </div>
+                    </a>
+                    @else
+                        <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 bg-slate-200 px-2 py-1 rounded">Kosong</span>
+                    </div>
+                    @endif
+
             </div>
         </div>
 
-        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-shadow duration-300 p-6 sm:p-8">
+        <!-- Bagian Catatan & Rekam Jejak -->
+        <div class="pt-8 md:pt-0 md:pl-8">
             <h3 class="text-lg font-bold font-geist text-primary mb-6 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 Catatan & Rekam Jejak

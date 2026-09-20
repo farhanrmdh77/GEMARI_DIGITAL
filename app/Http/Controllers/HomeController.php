@@ -7,6 +7,7 @@ use App\Mahasiswa;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -17,6 +18,16 @@ class HomeController extends Controller
 
     public function index()
     {
+        $user = Auth::user();
+
+        if ($user->role === 'Siswa') {
+            $data = Siswa::where('email', $user->email)->first();
+            return view('user.home', compact('data', 'user'));
+        } elseif ($user->role === 'Mahasiswa') {
+            $data = Mahasiswa::where('email', $user->email)->first();
+            return view('user.home', compact('data', 'user'));
+        }
+
         // 1. Ubah Hari Ini menjadi ANGKA MURNI (Timestamp)
         $todayTs = strtotime(Carbon::now('Asia/Jakarta')->format('Y-m-d'));
 
@@ -95,5 +106,19 @@ class HomeController extends Controller
             'total_laki', 'total_perempuan',
             'instansi_labels', 'instansi_data'
         ));
+    }
+
+    public function viewDokumen($path)
+    {
+        // Hilangkan slash di awal/akhir jika ada
+        $path = trim($path, '/');
+        
+        $fullPath = storage_path('app/public/' . $path);
+        
+        if (!file_exists($fullPath)) {
+            abort(404, 'Dokumen tidak ditemukan.');
+        }
+
+        return response()->file($fullPath);
     }
 }

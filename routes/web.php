@@ -22,9 +22,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', 'AuthController@showLogin')->name('login');
     Route::post('/login', 'AuthController@login');
     
-    // Menampilkan halaman dan proses Register
-    Route::get('/register', 'AuthController@showRegister')->name('register');
-    Route::post('/register', 'AuthController@register');
+    // Rute register dimatikan (dipindah ke User Management)
 
     // Password Reset OTP Routes
     Route::get('password/reset', 'AuthController@showEmailForm')->name('password.request');
@@ -45,41 +43,63 @@ Route::middleware('auth')->group(function () {
     // Dashboard Utama
     Route::get('/home', 'HomeController@index')->name('home');
     
-    // --- MANAJEMEN DATA SISWA ---
-    Route::get('/siswa', 'SiswaController@index')->name('siswa.index');
-    Route::get('/siswa/tambah', 'SiswaController@create')->name('siswa.create'); 
-    Route::post('/siswa', 'SiswaController@store')->name('siswa.store'); 
-    Route::get('/siswa/{id}/edit', 'SiswaController@edit')->name('siswa.edit'); 
-    Route::put('/siswa/{id}', 'SiswaController@update')->name('siswa.update'); 
-    Route::delete('/siswa/{id}', 'SiswaController@destroy')->name('siswa.destroy'); 
-    Route::get('/siswa/{id}', 'SiswaController@show')->name('siswa.show');
-    
-    // Route Cetak Sertifikat, ID Card, dan Biodata Siswa
+    // --- MANAJEMEN DATA SISWA (Khusus Admin) ---
+    Route::middleware('role:Superadmin,Admin Humas')->group(function () {
+        Route::get('/siswa', 'SiswaController@index')->name('siswa.index');
+        Route::get('/siswa/tambah', 'SiswaController@create')->name('siswa.create'); 
+        Route::post('/siswa', 'SiswaController@store')->name('siswa.store'); 
+        Route::get('/siswa/{id}/edit', 'SiswaController@edit')->name('siswa.edit'); 
+        Route::put('/siswa/{id}', 'SiswaController@update')->name('siswa.update'); 
+        Route::delete('/siswa/{id}', 'SiswaController@destroy')->name('siswa.destroy'); 
+        Route::get('/siswa/{id}', 'SiswaController@show')->name('siswa.show');
+        
+        // --- MANAJEMEN DATA MAHASISWA ---
+        Route::get('/mahasiswa', 'MahasiswaController@index')->name('mahasiswa.index');
+        Route::get('/mahasiswa/tambah', 'MahasiswaController@create')->name('mahasiswa.create'); 
+        Route::post('/mahasiswa', 'MahasiswaController@store')->name('mahasiswa.store'); 
+        Route::get('/mahasiswa/{id}/edit', 'MahasiswaController@edit')->name('mahasiswa.edit'); 
+        Route::put('/mahasiswa/{id}', 'MahasiswaController@update')->name('mahasiswa.update'); 
+        Route::delete('/mahasiswa/{id}', 'MahasiswaController@destroy')->name('mahasiswa.destroy'); 
+        Route::get('/mahasiswa/{id}', 'MahasiswaController@show')->name('mahasiswa.show');
+
+        // --- MANAJEMEN AKUN (USER) ---
+        Route::resource('users', 'UserController');
+
+        // --- MANAJEMEN LAPORAN ---
+        Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
+        Route::get('/laporan/kalender-data', 'LaporanController@calendarData')->name('laporan.calendar_data');
+
+        // --- PENGATURAN PROFIL & SANDI ---
+        Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
+        Route::post('/pengaturan/profil', 'PengaturanController@updateProfile')->name('pengaturan.profil');
+        Route::post('/pengaturan/password', 'PengaturanController@updatePassword')->name('pengaturan.password');
+    });
+
+    // Route Cetak Sertifikat, ID Card, dan Biodata (Bisa diakses oleh admin dan peserta ybs)
     Route::get('/siswa/{id}/sertifikat', 'SiswaController@sertifikat')->name('siswa.sertifikat');
     Route::get('/siswa/{id}/id-card', 'SiswaController@idCard')->name('siswa.id_card');
     Route::get('/siswa/{id}/biodata', 'SiswaController@biodata')->name('siswa.biodata');
-
-    // --- MANAJEMEN DATA MAHASISWA ---
-    Route::get('/mahasiswa', 'MahasiswaController@index')->name('mahasiswa.index');
-    Route::get('/mahasiswa/tambah', 'MahasiswaController@create')->name('mahasiswa.create'); 
-    Route::post('/mahasiswa', 'MahasiswaController@store')->name('mahasiswa.store'); 
-    Route::get('/mahasiswa/{id}/edit', 'MahasiswaController@edit')->name('mahasiswa.edit'); 
-    Route::put('/mahasiswa/{id}', 'MahasiswaController@update')->name('mahasiswa.update'); 
-    Route::delete('/mahasiswa/{id}', 'MahasiswaController@destroy')->name('mahasiswa.destroy'); 
-    Route::get('/mahasiswa/{id}', 'MahasiswaController@show')->name('mahasiswa.show');
-
-    // Route Cetak Sertifikat, ID Card, dan Biodata Mahasiswa
     Route::get('/mahasiswa/{id}/sertifikat', 'MahasiswaController@sertifikat')->name('mahasiswa.sertifikat');
     Route::get('/mahasiswa/{id}/id-card', 'MahasiswaController@idCard')->name('mahasiswa.id_card');
     Route::get('/mahasiswa/{id}/biodata', 'MahasiswaController@biodata')->name('mahasiswa.biodata');
 
-    // --- MANAJEMEN LAPORAN ---
-    Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
+    // --- KHUSUS SUPERADMIN ---
+    Route::middleware('role:Superadmin')->group(function () {
+        // --- PENGATURAN SISTEM & INSTANSI ---
+        Route::post('/pengaturan/instansi', 'PengaturanController@updateInstansi')->name('pengaturan.instansi');
 
-    // --- MANAJEMEN PENGATURAN ---
-    Route::get('/pengaturan', 'PengaturanController@index')->name('pengaturan.index');
-    Route::post('/pengaturan/profil', 'PengaturanController@updateProfile')->name('pengaturan.profil');
-    Route::post('/pengaturan/password', 'PengaturanController@updatePassword')->name('pengaturan.password');
-    Route::post('/pengaturan/instansi', 'PengaturanController@updateInstansi')->name('pengaturan.instansi');
+        // --- MANAJEMEN MASTER DATA INSTANSI ---
+        Route::post('/instansi', 'InstansiController@store')->name('instansi.store');
+        Route::delete('/instansi/{id}', 'InstansiController@destroy')->name('instansi.destroy');
+    });
+
+    // --- UPLOAD DOKUMEN OLEH USER ---
+    Route::middleware('role:Siswa,Mahasiswa')->group(function () {
+        Route::post('/user/upload-dokumen', 'UserController@uploadDokumen')->name('user.upload_dokumen');
+    });
     
+    // --- VIEW DOKUMEN SECARA AMAN ---
+    Route::get('/view-dokumen/{path}', 'HomeController@viewDokumen')
+        ->where('path', '.*')
+        ->name('dokumen.view');
 });

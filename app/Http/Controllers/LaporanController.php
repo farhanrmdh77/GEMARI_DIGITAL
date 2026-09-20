@@ -40,11 +40,13 @@ class LaporanController extends Controller
             }
 
             // Filter Tanggal
-            if ($tgl_mulai) {
-                $query->where('tgl_mulai', '>=', $tgl_mulai);
-            }
-            if ($tgl_akhir) {
-                $query->where('tgl_selesai', '<=', $tgl_akhir);
+            if ($tgl_mulai && $tgl_akhir) {
+                $query->where('tgl_mulai', '<=', $tgl_akhir)
+                      ->where('tgl_selesai', '>=', $tgl_mulai);
+            } elseif ($tgl_mulai) {
+                $query->where('tgl_selesai', '>=', $tgl_mulai);
+            } elseif ($tgl_akhir) {
+                $query->where('tgl_mulai', '<=', $tgl_akhir);
             }
             return $query;
         };
@@ -86,5 +88,155 @@ class LaporanController extends Controller
 
         // Jika hanya preview atau muat awal, tampilkan di index
         return view('laporan.index', compact('data'));
+    }
+
+    public function calendarData(Request $request)
+    {
+        $startStr = $request->input('start'); // dari FullCalendar (ISO8601)
+        $endStr = $request->input('end');     // dari FullCalendar (ISO8601)
+        
+        $kategori = $request->input('kategori', 'semua');
+        $status = $request->input('status', 'semua');
+        $tgl_mulai = $request->input('tgl_mulai');
+        $tgl_akhir = $request->input('tgl_akhir');
+        
+        if (!$startStr || !$endStr) {
+            $start = Carbon::now()->startOfMonth();
+            $end = Carbon::now()->endOfMonth();
+        } else {
+            $start = Carbon::parse($startStr);
+            $end = Carbon::parse($endStr);
+        }
+
+        $today = Carbon::today()->toDateString();
+
+        // Fungsi bantuan filter untuk calendar
+        $applyFilters = function($query) use ($status, $today, $tgl_mulai, $tgl_akhir, $start, $end) {
+            // Filter rentang waktu yang terlihat di kalender
+            $query->whereNotNull('tgl_mulai')
+                  ->whereNotNull('tgl_selesai')
+                  ->where('tgl_mulai', '<=', $end->toDateString())
+                  ->where('tgl_selesai', '>=', $start->toDateString());
+
+            // Filter Status
+            if ($status == 'aktif') {
+                $query->where('tgl_mulai', '<=', $today)
+                      ->where('tgl_selesai', '>=', $today);
+            } elseif ($status == 'selesai') {
+                $query->where('tgl_selesai', '<', $today);
+            }
+
+            // Filter Tanggal Manual
+            if ($tgl_mulai && $tgl_akhir) {
+                $query->where('tgl_mulai', '<=', $tgl_akhir)
+                      ->where('tgl_selesai', '>=', $tgl_mulai);
+            } elseif ($tgl_mulai) {
+                $query->where('tgl_selesai', '>=', $tgl_mulai);
+            } elseif ($tgl_akhir) {
+                $query->where('tgl_mulai', '<=', $tgl_akhir);
+            }
+            return $query;
+        };
+
+        $siswas = collect();
+        if ($kategori == 'semua' || $kategori == 'siswa') {
+            $siswas = $applyFilters(Siswa::query())
+                ->get()->map(function($item) {
+                    $item->kategori = 'Siswa';
+                    $item->institusi = $item->asal_sekolah;
+                    return $item;
+                });
+        }
+
+        $mahasiswas = collect();
+        if ($kategori == 'semua' || $kategori == 'mahasiswa') {
+            $mahasiswas = $applyFilters(Mahasiswa::query())
+                ->get()->map(function($item) {
+                    $item->kategori = 'Mahasiswa';
+                    $item->institusi = $item->asal_kampus;
+                    return $item;
+                });
+        }
+
+        $allData = $siswas->concat($mahasiswas);
+        $events = [];
+        
+        $today = Carbon::today()->toDateString();
+        
+        // Kelompokkan data berdasarkan tanggal mulai dan kategori
+        $groupedData = $allData->groupBy(function($item) {
+            return $item->tgl_mulai . '_' . $item->kategori;
+        });
+
+        foreach ($groupedData as $key => $pesertaHariIni) {
+            $parts = explode('_', $key);
+            $dateStr = $parts[0];
+            $kategoriGroup = $parts[1]; // 'Siswa' atau 'Mahasiswa'
+
+            $count = count($pesertaHariIni);
+            $hasAktif = false;
+            $hasPending = false;
+            
+            $pesertaFormatted = [];
+
+            foreach ($pesertaHariIni as $p) {
+                // Logika Warna Status berdasarkan hari ini (today)
+                if ($today < $p->tgl_mulai) {
+                    $status = 'Pending';
+                    $hasPending = true;
+                } elseif ($today >= $p->tgl_mulai && $today <= $p->tgl_selesai) {
+                    $status = 'Aktif';
+                    $hasAktif = true;
+                } else {
+                    $status = 'Selesai';
+                }
+
+                $pesertaFormatted[] = [
+                    'nama' => $p->nama,
+                    'kategori' => $p->kategori,
+                    'institusi' => $p->institusi,
+                    'unit' => $p->unit_penempatan,
+                    'periode' => Carbon::parse($p->tgl_mulai)->format('d M Y') . ' - ' . Carbon::parse($p->tgl_selesai)->format('d M Y'),
+                    'status' => $status
+                ];
+            }
+
+            // Warna titik penanda prioritas:
+            // Mahasiswa = Biru/Cyan
+            // Siswa = Ungu/Pink
+            // Tapi untuk tetap bedakan status aktif/selesai:
+            if ($kategoriGroup == 'Mahasiswa') {
+                if ($hasAktif) {
+                    $color = '#3b82f6'; // Biru aktif
+                } elseif ($hasPending) {
+                    $color = '#93c5fd'; // Biru muda pending
+                } else {
+                    $color = '#94a3b8'; // Abu-abu selesai
+                }
+            } else {
+                if ($hasAktif) {
+                    $color = '#8b5cf6'; // Ungu aktif
+                } elseif ($hasPending) {
+                    $color = '#c4b5fd'; // Ungu muda pending
+                } else {
+                    $color = '#94a3b8'; // Abu-abu selesai
+                }
+            }
+
+            $events[] = [
+                'id' => 'mulai_' . $key,
+                'title' => $count . ' ' . $kategoriGroup,
+                'start' => $dateStr,
+                'color' => $color,
+                'extendedProps' => [
+                    'peserta' => $pesertaFormatted,
+                    'tanggal_format' => Carbon::parse($dateStr)->translatedFormat('d F Y'),
+                    'count' => $count,
+                    'kategori' => $kategoriGroup
+                ]
+            ];
+        }
+
+        return response()->json($events);
     }
 }

@@ -80,7 +80,12 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5">
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Asal Sekolah <span class="text-red-500">*</span></label>
-                        <input type="text" name="asal_sekolah" value="{{ old('asal_sekolah') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all" placeholder="Nama instansi pendidikan" required>
+                        <select name="asal_sekolah" class="searchable-select w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all cursor-pointer" required>
+                            <option value="" disabled selected>Pilih Asal Sekolah</option>
+                            @foreach($instansis as $instansi)
+                                <option value="{{ $instansi->nama_instansi }}" {{ old('asal_sekolah') == $instansi->nama_instansi ? 'selected' : '' }}>{{ $instansi->nama_instansi }}</option>
+                            @endforeach
+                        </select>
                     </div>
 
                     <div>
@@ -99,6 +104,39 @@
                             <option value="Subbagian Humas dan TU Kalan" {{ old('unit_penempatan') == 'Subbagian Humas dan TU Kalan' ? 'selected' : '' }}>Subbagian Humas dan TU Kalan</option>
                             <option value="Pemeriksa (Auditor)" {{ old('unit_penempatan') == 'Pemeriksa (Auditor)' ? 'selected' : '' }}>Pemeriksa (Auditor)</option>
                         </select>
+                    </div>
+
+                    <div class="sm:col-span-2 mt-2">
+                        <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Jenis Magang <span class="text-red-500">*</span></label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="relative cursor-pointer block">
+                                <input type="radio" name="jenis_magang" value="Reguler" class="peer sr-only" required {{ old('jenis_magang', 'Reguler') == 'Reguler' ? 'checked' : '' }}>
+                                <div class="absolute inset-0 border-2 border-slate-200 rounded-xl transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-hover:border-slate-300 pointer-events-none"></div>
+                                <div class="relative p-4 flex items-center pointer-events-none z-10">
+                                    <div class="flex-1 pr-8">
+                                        <div class="font-bold text-slate-800 font-geist mb-0.5">Magang Reguler</div>
+                                        <div class="text-[11px] text-slate-500 font-inter leading-tight">Magang standar tanpa skema pembayaran.</div>
+                                    </div>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all peer-checked:border-primary peer-checked:bg-primary z-10 pointer-events-none">
+                                    <svg class="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                            </label>
+
+                            <label class="relative cursor-pointer block">
+                                <input type="radio" name="jenis_magang" value="Berbayar" class="peer sr-only" required {{ old('jenis_magang') == 'Berbayar' ? 'checked' : '' }}>
+                                <div class="absolute inset-0 border-2 border-slate-200 rounded-xl transition-all peer-checked:border-primary peer-checked:bg-primary/5 peer-hover:border-slate-300 pointer-events-none"></div>
+                                <div class="relative p-4 flex items-center pointer-events-none z-10">
+                                    <div class="flex-1 pr-8">
+                                        <div class="font-bold text-slate-800 font-geist mb-0.5">Magang Berbayar</div>
+                                        <div class="text-[11px] text-slate-500 font-inter leading-tight">Magang dengan skema pembayaran (mandiri).</div>
+                                    </div>
+                                </div>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full border-2 border-slate-300 flex items-center justify-center transition-all peer-checked:border-primary peer-checked:bg-primary z-10 pointer-events-none">
+                                    <svg class="w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                </div>
+                            </label>
+                        </div>
                     </div>
 
                     <div>
@@ -163,6 +201,27 @@
                     </div>
                 </div>
             </div>
+            </div>
+
+            <!-- ================= SEKSI 4: DOKUMEN MAGANG ================= -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-100 pt-8 mt-4">
+                <div>
+                    <h3 class="text-[15px] font-bold font-geist text-primary mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13"></path></svg>
+                        Surat Permohonan
+                    </h3>
+                    <input type="file" name="surat_permohonan" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-primary outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" accept=".pdf">
+                    <p class="text-xs text-slate-500 mt-2">Unggah file (Opsional). Format: PDF (Max: 5MB)</p>
+                </div>
+                <div>
+                    <h3 class="text-[15px] font-bold font-geist text-primary mb-4 flex items-center gap-2">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        Laporan Magang
+                    </h3>
+                    <input type="file" name="laporan_magang" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-800 focus:border-primary outline-none transition-all cursor-pointer file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20" accept=".pdf">
+                    <p class="text-xs text-slate-500 mt-2">Unggah file (Opsional). Format: PDF (Max: 10MB)</p>
+                </div>
+            </div>
 
         </div> 
         
@@ -194,5 +253,12 @@
             reader.readAsDataURL(file);
         }
     }
+
+    // Mencegah form tersubmit saat menekan Enter di kolom input
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter' && event.target.tagName === 'INPUT') {
+            event.preventDefault();
+        }
+    });
 </script>
 @endsection

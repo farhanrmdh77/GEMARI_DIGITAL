@@ -136,10 +136,6 @@
                             Masuk ke Sistem <i class="fa-solid fa-arrow-right-to-bracket"></i>
                         </button>
                     </div>
-                    
-                    <p class="text-center text-sm text-slate-500 font-inter mt-6">
-                        Belum memiliki akun? <a href="{{ route('register') }}" class="font-semibold text-primary hover:text-primary-hover transition-colors">Daftar sekarang</a>
-                    </p>
                 </form>
             </div>
             

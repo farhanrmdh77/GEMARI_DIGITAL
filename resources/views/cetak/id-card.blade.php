@@ -67,7 +67,7 @@
 
         <!-- Detail Peserta -->
         <div class="w-full px-2 mt-2 text-center flex-1">
-            <p class="text-[8px] font-bold text-amber-600 tracking-widest uppercase mb-1 font-['Montserrat']">PESERTA MAGANG</p>
+            <p class="text-[9.5px] font-bold text-amber-600 tracking-widest uppercase mb-0.5 font-['Montserrat']">PESERTA MAGANG</p>
             
             <h1 class="text-[11px] font-bold text-slate-800 leading-tight mb-0.5">{{ $data->nama }}</h1>
             <p class="text-[8px] text-slate-500 font-semibold mb-1.5">{{ $data instanceof \App\Mahasiswa ? 'NIM. ' : 'NIS. ' }}{{ $data->nis ?? $data->nim ?? '-' }}</p>
@@ -79,8 +79,8 @@
         </div>
 
         <!-- Bagian Bawah -->
-        <div class="w-full bg-[#034c7a] h-[6mm] flex items-center justify-center mt-auto text-white">
-            <p class="text-[7px] font-semibold tracking-wider">{{ strtoupper($data->unit_penempatan) }}</p>
+        <div class="w-full bg-[#034c7a] h-[6mm] flex items-center justify-center mt-auto text-white shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+            <p class="text-[6.5px] font-bold tracking-widest">{{ \Carbon\Carbon::parse($data->tgl_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($data->tgl_selesai)->format('d M Y') }}</p>
         </div>
     </div>
 </body>

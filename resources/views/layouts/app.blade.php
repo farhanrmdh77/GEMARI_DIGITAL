@@ -11,6 +11,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.0.3/dist/fonts/geist-sans/style.css" rel="stylesheet">
+    
+    <!-- Tom Select (Searchable Dropdown) -->
+    <link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -41,6 +45,8 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @stack('styles')
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden flex h-screen" x-data="{ sidebarOpen: false }">
 
@@ -65,30 +71,51 @@
                 <li>
                     <a href="/home" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->is('home') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        Dashboard
+                        @if(Auth::check() && in_array(Auth::user()->role, ['Siswa', 'Mahasiswa']))
+                            Portal Magang
+                        @else
+                            Dashboard
+                        @endif
                     </a>
                 </li>
+                @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas', 'Siswa']))
                 <li>
                     <a href="{{ route('siswa.index') }}" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('siswa.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
                         Data Siswa
                     </a>
                 </li>
+                @endif
+                
+                @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas', 'Mahasiswa']))
                 <li>
                     <a href="{{ route('mahasiswa.index') }}" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('mahasiswa.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
                         Data Mahasiswa
                     </a>
                 </li>
+                @endif
+                
+                @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
                 <li>
                     <a href="{{ route('laporan.index') }}" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('laporan.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                         Laporan
                     </a>
                 </li>
+                @endif
+                @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
+                <li>
+                    <a href="{{ route('users.index') }}" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('users.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        Manajemen Akun
+                    </a>
+                </li>
+                @endif
             </ul>
         </nav>
 
+        @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
         <!-- Bottom Area: Pengaturan (Dipisah Sempurna di Bawah) -->
         <div class="px-4 py-6 mt-auto border-t border-white/10">
             <p class="px-3 text-[11px] font-bold font-geist text-white/50 uppercase tracking-widest mb-3">Sistem</p>
@@ -97,6 +124,7 @@
                 Pengaturan
             </a>
         </div>
+        @endif
     </aside>
 
     <!-- Overlay Mobile -->
@@ -127,8 +155,8 @@
                 <button @click="dropdownOpen = !dropdownOpen" class="flex items-center focus:outline-none">
                     <!-- Avatar Profil dengan Pengecekan Foto -->
                     <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-200 bg-teal-50 flex items-center justify-center text-primary font-bold font-geist shadow-sm uppercase shrink-0">
-                        @if(Auth::check() && Auth::user()->foto_admin)
-                            <img src="{{ asset('storage/' . Auth::user()->foto_admin) }}" alt="Profil" class="w-full h-full object-cover">
+                        @if(Auth::check() && Auth::user()->profile_photo)
+                            <img src="{{ asset('storage/' . Auth::user()->profile_photo) }}" alt="Profil" class="w-full h-full object-cover">
                         @else
                             {{ substr(Auth::user()->name ?? 'A', 0, 1) }}
                         @endif
@@ -137,8 +165,10 @@
 
                 <!-- Dropdown Menu -->
                 <div x-show="dropdownOpen" @click.away="dropdownOpen = false" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-level-2 border border-slate-200 py-2 z-50" style="display: none;">
+                    @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
                     <a href="{{ route('pengaturan.index') }}" class="block px-4 py-2 text-sm font-medium font-geist text-slate-700 hover:bg-slate-50 hover:text-primary transition-colors">Pengaturan Akun</a>
                     <div class="border-t border-slate-100 my-1"></div>
+                    @endif
                     <form method="POST" action="{{ route('logout') }}" id="logout-form">
                         @csrf
                         <button type="button" onclick="confirmLogout()" class="w-full text-left px-4 py-2 text-sm font-medium font-geist text-slate-700 hover:bg-red-50 hover:text-red-600 transition-colors">
@@ -173,7 +203,8 @@
                 confirmButtonColor: '#0d9488',
                 cancelButtonColor: '#ef4444',
                 confirmButtonText: 'Ya, Keluar!',
-                cancelButtonText: 'Batal'
+                cancelButtonText: 'Batal',
+                heightAuto: false
             }).then((result) => {
                 if (result.isConfirmed) {
                     document.getElementById('logout-form').submit();
@@ -197,6 +228,7 @@
                         cancelButtonColor: '#64748b',
                         confirmButtonText: 'Ya, Hapus!',
                         cancelButtonText: 'Batal',
+                        heightAuto: false,
                         customClass: {
                             confirmButton: 'font-geist',
                             cancelButton: 'font-geist',
@@ -211,7 +243,22 @@
                 });
             });
         });
+
+        // Inisialisasi TomSelect untuk elemen select dengan class .searchable-select
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.searchable-select').forEach(function(el) {
+                new TomSelect(el, {
+                    create: false,
+                    sortField: {
+                        field: "text",
+                        direction: "asc"
+                    }
+                });
+            });
+        });
     </script>
+
+    @stack('scripts')
 </body>
 </html>
 

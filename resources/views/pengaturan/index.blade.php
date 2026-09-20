@@ -122,6 +122,7 @@
         </form>
     </div>
 
+    @if(Auth::user()->role === 'Superadmin')
     <!-- ================= KARTU 3: KONFIGURASI INSTANSI ================= -->
     <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
         <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
@@ -193,7 +194,135 @@
         </form>
     </div>
 
-    <!-- ================= KARTU 4: ZONA BAHAYA (LOGOUT) ================= -->
+    <!-- ================= KARTU 4: MASTER DATA INSTANSI ================= -->
+    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-12">
+        <div class="px-8 py-5 border-b border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                </div>
+                <div>
+                    <h3 class="text-[17px] font-bold font-geist text-slate-800">Master Data Asal Sekolah / Kampus</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="p-8" x-data="instansiData()">
+            <p class="text-sm text-slate-500 mb-6 font-inter leading-relaxed">
+                Tambahkan daftar asal sekolah atau kampus agar pada saat pendaftaran pengguna bisa memilih dari dropdown untuk menghindari duplikasi data.
+            </p>
+
+            <form action="{{ route('instansi.store') }}" method="POST" class="mb-8 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                @csrf
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div class="md:col-span-1">
+                        <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Jenis</label>
+                        <select name="jenis" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all font-inter" required>
+                            <option value="Sekolah">Sekolah</option>
+                            <option value="Kampus">Kampus</option>
+                        </select>
+                    </div>
+                    <div class="md:col-span-1">
+                        <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Nama Instansi</label>
+                        <input type="text" name="nama_instansi" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 focus:border-primary transition-all font-inter" placeholder="Contoh: SMKN 1 Jambi" required>
+                    </div>
+                    <div class="md:col-span-1">
+                        <button type="submit" class="w-full inline-flex items-center justify-center bg-emerald-600 hover:bg-emerald-700 text-white font-medium font-geist rounded-lg px-5 py-2.5 text-sm transition-colors shadow-sm focus:ring-2 focus:ring-emerald-600/40 focus:ring-offset-2">
+                            Tambah Instansi
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Tabel Instansi dgn AlpineJS -->
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+                <!-- Dropdown Show Entries -->
+                <div class="flex items-center gap-2">
+                    <span class="text-sm text-slate-500">Tampilkan</span>
+                    <select x-model="perPage" @change="changePage(1)" class="bg-white border border-slate-200 rounded-md text-sm px-2 py-1 outline-none focus:border-primary">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span class="text-sm text-slate-500">entri</span>
+                </div>
+                
+                <!-- Filter Jenis dan Pencarian -->
+                <div class="flex items-center gap-3 w-full sm:w-auto">
+                    <select x-model="filterJenis" @change="changePage(1)" class="bg-white border border-slate-200 rounded-md text-sm px-3 py-1.5 outline-none focus:border-primary">
+                        <option value="">Semua Jenis</option>
+                        <option value="Sekolah">Sekolah</option>
+                        <option value="Kampus">Kampus</option>
+                    </select>
+                    
+                    <div class="relative w-full sm:w-64">
+                        <input type="text" x-model="search" @input="changePage(1)" placeholder="Cari nama instansi..." class="w-full bg-white border border-slate-200 rounded-md text-sm pl-8 pr-3 py-1.5 outline-none focus:border-primary">
+                        <svg class="w-4 h-4 text-slate-400 absolute left-2.5 top-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto bg-white border border-slate-200 rounded-xl shadow-sm">
+                <table class="w-full text-left border-collapse whitespace-nowrap">
+                    <thead>
+                        <tr class="bg-slate-50 border-b border-slate-200">
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-16">ID</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist">Nama Instansi</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-32">Jenis</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist text-right w-24">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+                        <template x-for="inst in paginatedData" :key="inst.id">
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-5 py-4 text-sm text-slate-600 font-inter" x-text="inst.id"></td>
+                                <td class="px-5 py-4 text-sm text-slate-800 font-medium font-inter" x-text="inst.nama_instansi"></td>
+                                <td class="px-5 py-4 text-sm font-inter">
+                                    <span class="px-2.5 py-1 rounded-md text-xs font-medium" 
+                                          :class="inst.jenis === 'Sekolah' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'" 
+                                          x-text="inst.jenis"></span>
+                                </td>
+                                <td class="px-5 py-4 text-sm text-right">
+                                    <button type="button" @click="deleteInstansi(inst.id, inst.nama_instansi)" class="text-red-500 hover:text-red-700 font-medium text-xs transition-colors p-1.5 hover:bg-red-50 rounded-md">
+                                        Hapus
+                                    </button>
+                                </td>
+                            </tr>
+                        </template>
+                        <tr x-show="paginatedData.length === 0" style="display: none;">
+                            <td colspan="4" class="px-5 py-8 text-center text-slate-500 text-sm font-inter">Tidak ada data ditemukan.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Footer Pagination -->
+            <div class="mt-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-500 font-inter">
+                    Menampilkan <span x-text="startRecord" class="font-medium text-slate-700"></span> sampai <span x-text="endRecord" class="font-medium text-slate-700"></span> dari <span x-text="filteredData.length" class="font-medium text-slate-700"></span> entri
+                </div>
+                <div class="flex items-center gap-1" x-show="totalPages > 1" style="display: none;">
+                    <button @click="prevPage()" :disabled="currentPage === 1" class="px-3 py-1.5 text-sm font-medium rounded-md border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        Sebelumnya
+                    </button>
+                    
+                    <button @click="nextPage()" :disabled="currentPage === totalPages" class="px-3 py-1.5 text-sm font-medium rounded-md border border-slate-200 text-slate-600 bg-white hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                        Selanjutnya
+                    </button>
+                </div>
+            </div>
+
+            <!-- Form Hidden untuk Hapus -->
+            <form id="delete-instansi-form" method="POST" class="hidden">
+                @csrf
+                @method('DELETE')
+            </form>
+        </div>
+    </div>
+    @endif
+
+    <!-- ================= KARTU 5: ZONA BAHAYA (LOGOUT) ================= -->
     <div class="bg-red-50/50 rounded-2xl border border-red-100 shadow-sm p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
             <h3 class="text-[17px] font-bold font-geist text-red-800 mb-1">Keluar dari Aplikasi</h3>
@@ -228,5 +357,83 @@
             reader.readAsDataURL(file);
         }
     }
+</script>
+
+<!-- Script AlpineJS untuk DataTable Instansi -->
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('instansiData', () => ({
+            allData: @json($instansis),
+            perPage: 10,
+            currentPage: 1,
+            search: '',
+            filterJenis: '',
+            
+            get filteredData() {
+                return this.allData.filter(item => {
+                    const matchJenis = this.filterJenis === '' || item.jenis === this.filterJenis;
+                    const matchSearch = item.nama_instansi.toLowerCase().includes(this.search.toLowerCase());
+                    return matchJenis && matchSearch;
+                });
+            },
+            
+            get paginatedData() {
+                const start = (this.currentPage - 1) * this.perPage;
+                const end = start + parseInt(this.perPage);
+                return this.filteredData.slice(start, end);
+            },
+            
+            get totalPages() {
+                return Math.max(1, Math.ceil(this.filteredData.length / this.perPage));
+            },
+            
+            get startRecord() {
+                return this.filteredData.length === 0 ? 0 : ((this.currentPage - 1) * parseInt(this.perPage)) + 1;
+            },
+            
+            get endRecord() {
+                const end = this.currentPage * parseInt(this.perPage);
+                return end > this.filteredData.length ? this.filteredData.length : end;
+            },
+            
+            changePage(page) {
+                this.currentPage = page;
+            },
+            
+            prevPage() {
+                if (this.currentPage > 1) this.currentPage--;
+            },
+            
+            nextPage() {
+                if (this.currentPage < this.totalPages) this.currentPage++;
+            },
+            
+            deleteInstansi(id, nama) {
+                Swal.fire({
+                    title: 'Hapus Data?',
+                    text: `Apakah Anda yakin ingin menghapus instansi ${nama}? Data pengguna yang terkait mungkin terdampak.`,
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#ef4444',
+                    cancelButtonColor: '#64748b',
+                    confirmButtonText: 'Ya, Hapus!',
+                    cancelButtonText: 'Batal',
+                    heightAuto: false,
+                    customClass: {
+                        confirmButton: 'font-geist',
+                        cancelButton: 'font-geist',
+                        title: 'font-geist font-bold',
+                        popup: 'rounded-2xl shadow-xl border border-slate-100'
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        const form = document.getElementById('delete-instansi-form');
+                        form.action = `/instansi/${id}`;
+                        form.submit();
+                    }
+                });
+            }
+        }));
+    });
 </script>
 @endsection

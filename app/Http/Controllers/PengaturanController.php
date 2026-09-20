@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Setting; // Pastikan model Setting dipanggil di sini
+use App\Instansi;
 
 class PengaturanController extends Controller
 {
@@ -16,8 +17,9 @@ class PengaturanController extends Controller
         $user = Auth::user(); // Ambil data admin yang sedang login
         // Ambil data setting pertama, jika belum ada di database, buat instance/objek kosong
         $setting = Setting::first() ?? new Setting(); 
+        $instansis = Instansi::all();
         
-        return view('pengaturan.index', compact('user', 'setting'));
+        return view('pengaturan.index', compact('user', 'setting', 'instansis'));
     }
 
     // 2. Proses Perbarui Profil & Foto

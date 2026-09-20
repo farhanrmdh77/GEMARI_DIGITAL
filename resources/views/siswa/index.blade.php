@@ -4,27 +4,25 @@
 
 @section('content')
 <!-- Header Utama -->
-<div class="mb-6 flex items-center justify-between">
+<div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
     <div>
         <h2 class="text-2xl font-bold font-geist text-slate-800">Manajemen Data Siswa</h2>
         <p class="text-sm text-slate-500 font-inter mt-1">Kelola data siswa sekolah menengah (SMA/SMK/Sederajat) yang terdaftar di instansi.</p>
     </div>
+    <!-- Search Input -->
+    <div class="relative w-full md:w-72 shrink-0">
+        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+        </div>
+        <input type="text" id="searchInput" class="block w-full pl-9 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all font-inter shadow-sm" placeholder="Cari nama atau NIS...">
+    </div>
 </div>
 
-<!-- Toolbar: Real-time Search & Filter -->
-<div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 p-4 mb-8 flex flex-col xl:flex-row xl:items-center justify-between gap-4">
-    <div class="flex flex-col md:flex-row items-center gap-3 w-full xl:w-auto">
-        
-        <!-- Search Input -->
-        <div class="relative w-full md:w-64">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-            </div>
-            <input type="text" id="searchInput" class="block w-full pl-9 pr-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm text-slate-800 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/40 focus:bg-white outline-none transition-all font-inter" placeholder="Cari nama atau NIS...">
-        </div>
-        
+<!-- Toolbar: Real-time Filter -->
+<div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 p-4 mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+    <div class="flex flex-col md:flex-row flex-wrap items-center gap-3 w-full lg:flex-1">
         <!-- Filter Status -->
-        <select id="statusFilter" class="w-full md:w-40 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
+        <select id="statusFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
             <option value="all">Semua Status</option>
             <option value="Aktif">Aktif</option>
             <option value="Akan Masuk">Akan Masuk</option>
@@ -32,18 +30,36 @@
         </select>
 
         <!-- Filter Gender -->
-        <select id="genderFilter" class="w-full md:w-40 bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
+        <select id="genderFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
             <option value="all">Semua Gender</option>
             <option value="L">Laki-laki</option>
             <option value="P">Perempuan</option>
         </select>
+
+        <!-- Filter Sekolah -->
+        <select id="instansiFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
+            <option value="all">Semua Sekolah</option>
+            @foreach($instansis as $instansi)
+                <option value="{{ strtolower($instansi->nama_instansi) }}">{{ $instansi->nama_instansi }}</option>
+            @endforeach
+        </select>
+
+        <!-- Filter Jenis Magang -->
+        <select id="jenisMagangFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
+            <option value="all">Semua Jenis Magang</option>
+            <option value="reguler">Magang Reguler</option>
+            <option value="berbayar">Magang Berbayar</option>
+        </select>
     </div>
 
     <!-- Tambah Button -->
+    <!-- Tambah Button -->
+    @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
     <a href="{{ route('siswa.create') }}" class="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-medium font-geist rounded-lg px-5 py-2 text-sm transition-colors shadow-sm focus:ring-2 focus:ring-primary/40 whitespace-nowrap">
         <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
         Tambah Siswa
     </a>
+    @endif
 </div>
 
 <!-- ================= GRID CARD VIEW ================= -->
@@ -74,7 +90,9 @@
              data-nama="{{ strtolower($s->nama) }}" 
              data-identitas="{{ strtolower($s->nis) }}" 
              data-status="{{ $status }}" 
-             data-gender="{{ $s->jenis_kelamin }}">
+             data-gender="{{ $s->jenis_kelamin }}"
+             data-instansi="{{ strtolower($s->asal_sekolah) }}"
+             data-jenismagang="{{ strtolower($s->jenis_magang ?? 'reguler') }}">
             
             <!-- Body Card -->
             <div class="p-6 flex gap-6">
@@ -98,7 +116,10 @@
                 <!-- Informasi -->
                 <div class="flex-1 min-w-0 py-1">
                     <h3 class="text-lg font-bold font-geist text-primary truncate leading-tight mb-1">{{ $s->nama }}</h3>
-                    <div class="text-xs font-inter text-slate-500 mb-1">NIS: <span class="text-slate-800 font-medium">{{ $s->nis }}</span></div>
+                    <div class="flex items-center gap-2 mb-1">
+                        <div class="text-xs font-inter text-slate-500">NIS: <span class="text-slate-800 font-medium">{{ $s->nis }}</span></div>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full {{ ($s->jenis_magang ?? 'Reguler') == 'Berbayar' ? 'bg-amber-100 text-amber-700' : 'bg-blue-100 text-blue-700' }}">{{ $s->jenis_magang ?? 'Reguler' }}</span>
+                    </div>
                     <div class="text-sm font-bold font-inter text-slate-800 mb-2 truncate">{{ $s->asal_sekolah }}</div>
                     
                     <div class="text-xs font-inter text-slate-500 leading-tight mb-0.5">
@@ -128,6 +149,7 @@
                     Lihat Dokumen
                 </a>
                 <div class="flex items-center gap-2">
+                    @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
                     <a href="{{ route('siswa.edit', $s->id) }}" class="p-2 text-slate-400 hover:text-amber-500 transition-colors" title="Edit">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                     </a>
@@ -138,6 +160,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                         </button>
                     </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -158,6 +181,8 @@
         const searchInput = document.getElementById('searchInput');
         const statusFilter = document.getElementById('statusFilter');
         const genderFilter = document.getElementById('genderFilter');
+        const instansiFilter = document.getElementById('instansiFilter');
+        const jenisMagangFilter = document.getElementById('jenisMagangFilter');
         const cards = document.querySelectorAll('.data-card');
         const emptyState = document.getElementById('emptyState');
 
@@ -165,6 +190,8 @@
             const searchTerm = searchInput.value.toLowerCase();
             const statusValue = statusFilter.value;
             const genderValue = genderFilter.value;
+            const instansiValue = instansiFilter.value.toLowerCase();
+            const jenisMagangValue = jenisMagangFilter ? jenisMagangFilter.value.toLowerCase() : 'all';
             let visibleCount = 0;
 
             cards.forEach(card => {
@@ -172,12 +199,16 @@
                 const identitas = card.getAttribute('data-identitas');
                 const status = card.getAttribute('data-status');
                 const gender = card.getAttribute('data-gender');
+                const instansi = card.getAttribute('data-instansi');
+                const jenisMagang = card.getAttribute('data-jenismagang');
 
                 const matchesSearch = name.includes(searchTerm) || identitas.includes(searchTerm);
                 const matchesStatus = statusValue === 'all' || status === statusValue;
                 const matchesGender = genderValue === 'all' || gender === genderValue;
+                const matchesInstansi = instansiValue === 'all' || instansi === instansiValue;
+                const matchesJenisMagang = jenisMagangValue === 'all' || jenisMagang === jenisMagangValue;
 
-                if (matchesSearch && matchesStatus && matchesGender) {
+                if (matchesSearch && matchesStatus && matchesGender && matchesInstansi && matchesJenisMagang) {
                     card.style.display = 'flex';
                     visibleCount++;
                 } else {
@@ -196,6 +227,8 @@
         searchInput.addEventListener('input', filterData);
         statusFilter.addEventListener('change', filterData);
         genderFilter.addEventListener('change', filterData);
+        instansiFilter.addEventListener('change', filterData);
+        if(jenisMagangFilter) jenisMagangFilter.addEventListener('change', filterData);
     });
 </script>
 @endsection
