@@ -1,78 +1,94 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+# GEMARI DIGITAL 🎓💼
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+**GEMARI DIGITAL** (Gerakan & Sistem Informasi Pengelolaan Prakerin dan Magang Mahasiswa) adalah aplikasi berbasis web yang dirancang khusus untuk mempermudah instansi dalam mengelola siklus operasional, data diri, penempatan, kehadiran, dan administrasi peserta Praktik Kerja Lapangan (Siswa SMK) serta Mahasiswa Magang secara terpadu, efisien, dan transparan.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Fitur Unggulan
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. 👥 Manajemen Data Peserta Lengkap
+- **Siswa (Prakerin):** Manajemen biodata siswa SMK, asal sekolah, jurusan, NIS, kontak, dan wali.
+- **Mahasiswa (Magang):** Manajemen biodata mahasiswa, asal kampus, program studi, NIM, kontak, dan mentor.
+- **Klasifikasi Jenis Magang:**
+  - **Magang Reguler:** Skema magang kemitraan standar.
+  - **Magang Berbayar:** Skema magang mandiri / khusus dengan insentif/pembayaran.
+- **Quick Search & Filter:** Pencarian real-time berdasarkan Nama, NIS/NIM, Unit Penempatan, dan Jenis Magang.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 2. 🗂️ Manajemen Berkas & Dokumen Digital
+- Upload dan pratinjau Pas Foto (3x4).
+- Unggah dan verifikasi Surat Permohonan Magang (PDF).
+- Unggah dan review Laporan Akhir Magang (PDF).
+- Saluran akses dokumen aman dengan otorisasi khusus superadmin/admin humas/peserta.
 
-## Learning Laravel
+### 3. 🖨️ Cetak Dokumen Otomatis (Print-Ready)
+- **ID Card Peserta:** Kartu tanda pengenal dengan foto, nama, nomor induk, unit penempatan, dan logo instansi.
+- **Lembar Biodata Resmi:** Rekapitulasi profil lengkap peserta magang untuk arsip resmi.
+- **Sertifikat Kelulusan:** Template sertifikat resmi siap cetak lengkap dengan nomor otomatis dan tanggal penerbitan.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### 4. 📅 Manajemen Kuota & Monitoring Kalender
+- Validasi kapasitas kuota penerimaan peserta berdasarkan rentang tanggal aktif.
+- Kalender interaktif (FullCalendar) untuk melihat jadwal mulai dan berakhirnya masa magang setiap peserta secara visual.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 5. 🔐 Multi-Role Access Control (RBAC) & Keamanan
+- **Superadmin:** Kontrol penuh atas seluruh data, master instansi (kampus & sekolah), kuota, dan user management.
+- **Admin Humas:** Pengelolaan harian peserta, penugasan pembimbing/unit, dan monitoring laporan.
+- **Peserta (Siswa & Mahasiswa):** Akses mandiri untuk melengkapi data profil, upload berkas, dan mencetak dokumen.
+- Autentikasi aman dan sistem Reset Password menggunakan OTP via email.
 
-## Laravel Sponsors
+---
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## 🛠️ Tech Stack
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
+- **Backend:** Laravel Framework (PHP)
+- **Database:** MySQL
+- **Frontend & Styling:** Blade Templating, Tailwind CSS, Alpine.js
+- **Plugins:** SweetAlert2, Tom Select, FullCalendar
 
-## Contributing
+---
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 📦 Panduan Instalasi Lokal
 
-## Code of Conduct
+1. **Clone Repository**
+   ```bash
+   git clone https://github.com/farhanrmdh77/GEMARI_DIGITAL.git
+   cd GEMARI_DIGITAL
+   ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+2. **Install Dependencies**
+   ```bash
+   composer install
+   npm install
+   ```
 
-## Security Vulnerabilities
+3. **Konfigurasi Environment**
+   Salin berkas `.env.example` menjadi `.env`:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+   Sesuaikan konfigurasi database di `.env`:
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=gemari_digital
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+4. **Migrasi Database & Storage Link**
+   ```bash
+   php artisan migrate
+   php artisan storage:link
+   ```
 
-## License
+5. **Jalankan Aplikasi**
+   ```bash
+   php artisan serve
+   ```
+   Akses di peramban: `http://localhost:8000`
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## 📄 Lisensi
+Sistem ini dikembangkan untuk kebutuhan operasional pengelolaan peserta magang dan prakerin BPK Perwakilan Provinsi Jambi / Instansi terkait.
