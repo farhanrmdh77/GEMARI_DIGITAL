@@ -16,17 +16,18 @@
     <!-- Bagian Atas: Form Filter -->
     <div>
         <div class="bg-white rounded-[16px] shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 p-6">
-            <h3 class="text-[17px] font-bold font-geist text-slate-800 mb-6 pb-4 border-b border-slate-100 flex items-center gap-2">
+            <h3 class="text-[17px] font-bold font-geist text-slate-800 pb-4 mb-6 border-b border-slate-100 flex items-center gap-2">
                 <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path></svg>
                 Kriteria Ekspor Laporan
             </h3>
             
             <form action="{{ route('laporan.index') }}" method="GET">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
+                <!-- Grid Filter 4 Kolom: Lega, Proporsional, dan Mudah Dibaca -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <!-- Filter Kategori -->
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Kategori Data</label>
-                        <select name="kategori" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer transition-all">
+                        <select name="kategori" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer transition-all shadow-sm">
                             <option value="semua" {{ request('kategori') == 'semua' ? 'selected' : '' }}>Semua (Siswa & Mahasiswa)</option>
                             <option value="siswa" {{ request('kategori') == 'siswa' ? 'selected' : '' }}>Hanya Data Siswa</option>
                             <option value="mahasiswa" {{ request('kategori') == 'mahasiswa' ? 'selected' : '' }}>Hanya Data Mahasiswa</option>
@@ -36,7 +37,7 @@
                     <!-- Filter Status -->
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Status Peserta</label>
-                        <select name="status" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer transition-all">
+                        <select name="status" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer transition-all shadow-sm">
                             <option value="semua" {{ request('status') == 'semua' ? 'selected' : '' }}>Semua Status</option>
                             <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Sedang Aktif</option>
                             <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai Magang</option>
@@ -46,24 +47,31 @@
                     <!-- Tanggal Mulai -->
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Mulai Tanggal</label>
-                        <input type="date" name="tgl_mulai" value="{{ request('tgl_mulai') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all">
+                        <input type="date" name="tgl_mulai" value="{{ request('tgl_mulai') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all shadow-sm">
                     </div>
 
                     <!-- Tanggal Akhir -->
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Sampai Tanggal</label>
-                        <input type="date" name="tgl_akhir" value="{{ request('tgl_akhir') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all">
+                        <input type="date" name="tgl_akhir" value="{{ request('tgl_akhir') }}" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all shadow-sm">
                     </div>
+                </div>
 
-                    <!-- Tombol Cetak/Export & Pratinjau -->
-                    <div class="flex gap-2">
-                        <button type="button" onclick="previewCalendar()" class="w-full flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium font-geist rounded-lg px-2 py-2.5 text-sm transition-colors focus:ring-2 focus:ring-slate-200 focus:ring-offset-2 shadow-sm">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                <!-- Action Bar Bawah: Proporsional, Elegan, dan Nyaman Digunakan -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-5 mt-5 border-t border-slate-100">
+                    <div class="text-xs text-slate-400 font-inter flex items-center gap-1.5 self-start sm:self-center">
+                        <svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Sesuaikan kriteria filter di atas untuk menyaring kalender atau mengekspor dokumen laporan.
+                    </div>
+                    
+                    <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                        <button type="button" onclick="previewCalendar()" class="inline-flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium font-geist rounded-xl px-5 py-2.5 text-sm transition-all focus:ring-2 focus:ring-slate-200 shadow-sm cursor-pointer whitespace-nowrap">
+                            <svg class="w-4 h-4 mr-2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
                             Pratinjau
                         </button>
-                        <button type="submit" name="action" value="cetak" formtarget="_blank" class="w-full flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-medium font-geist rounded-lg px-2 py-2.5 text-sm transition-colors focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 shadow-sm">
+                        <button type="submit" name="action" value="cetak" formtarget="_blank" class="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-medium font-geist rounded-xl px-6 py-2.5 text-sm transition-all focus:ring-2 focus:ring-primary/40 shadow-sm cursor-pointer whitespace-nowrap">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            Unduh
+                            Unduh Laporan
                         </button>
                     </div>
                 </div>
