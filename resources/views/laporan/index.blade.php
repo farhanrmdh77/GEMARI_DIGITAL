@@ -22,8 +22,8 @@
             </h3>
             
             <form action="{{ route('laporan.index') }}" method="GET">
-                <!-- Grid Filter 4 Kolom: Lega, Proporsional, dan Mudah Dibaca -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Grid Filter 5 Kolom: Lega, Proporsional, dan Mudah Dibaca -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                     <!-- Filter Kategori -->
                     <div>
                         <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Kategori Data</label>
@@ -41,6 +41,16 @@
                             <option value="semua" {{ request('status') == 'semua' ? 'selected' : '' }}>Semua Status</option>
                             <option value="aktif" {{ request('status') == 'aktif' ? 'selected' : '' }}>Sedang Aktif</option>
                             <option value="selesai" {{ request('status') == 'selesai' ? 'selected' : '' }}>Selesai Magang</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Jenis Magang -->
+                    <div>
+                        <label class="block text-[11px] font-semibold font-geist text-slate-500 uppercase tracking-wider mb-2">Jenis Magang</label>
+                        <select name="jenis_magang" class="w-full bg-white border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-800 font-inter focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none cursor-pointer transition-all shadow-sm">
+                            <option value="semua" {{ request('jenis_magang') == 'semua' ? 'selected' : '' }}>Semua Jenis</option>
+                            <option value="Reguler" {{ request('jenis_magang') == 'Reguler' ? 'selected' : '' }}>Reguler</option>
+                            <option value="Berbayar" {{ request('jenis_magang') == 'Berbayar' ? 'selected' : '' }}>Berbayar</option>
                         </select>
                     </div>
 
@@ -210,6 +220,7 @@
                     return {
                         kategori: document.querySelector('select[name="kategori"]').value,
                         status: document.querySelector('select[name="status"]').value,
+                        jenis_magang: document.querySelector('select[name="jenis_magang"]').value,
                         tgl_mulai: document.querySelector('input[name="tgl_mulai"]').value,
                         tgl_akhir: document.querySelector('input[name="tgl_akhir"]').value,
                     };

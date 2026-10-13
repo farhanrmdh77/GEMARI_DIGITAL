@@ -78,12 +78,24 @@
         </div>
 
         <!-- ================= BAGIAN KANAN (FORM LOGIN) ================= -->
-        <div class="w-full lg:w-1/2 flex flex-col relative overflow-y-auto">
+        <div class="w-full lg:w-1/2 flex flex-col relative overflow-y-auto bg-gradient-to-br from-[#0f5132] to-[#022c22] lg:bg-none lg:bg-white">
             
-            <div class="flex-1 flex flex-col justify-center px-8 sm:px-16 md:px-24 py-12 max-w-xl mx-auto w-full">
+            <!-- Aksen Pola Dekoratif Khusus Mobile -->
+            <img src="{{ asset('images/gedung-bpk.jpg') }}" alt="Gedung BPK" class="lg:hidden absolute inset-0 w-full h-full object-cover opacity-10 mix-blend-overlay">
+            
+            <div class="flex-1 flex flex-col justify-center px-4 sm:px-8 md:px-16 lg:px-24 py-8 lg:py-12 max-w-xl mx-auto w-full relative z-10">
                 
-                <h1 class="text-3xl sm:text-4xl font-bold font-geist text-slate-900 mb-2">Selamat Datang!</h1>
-                <p class="text-base text-slate-500 font-inter mb-10">Silakan masuk menggunakan kredensial Anda.</p>
+                <!-- Tampilan Logo & Judul Khusus Mobile -->
+                <div class="flex lg:hidden flex-col items-center justify-center mb-6 sm:mb-8 text-center mt-4">
+                    <img src="{{ asset('assets/img/logo.png') }}" alt="Logo BPK" class="w-20 h-20 sm:w-24 sm:h-24 object-contain mb-3 sm:mb-4 drop-shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                    <h1 class="text-2xl sm:text-3xl font-black font-geist text-white tracking-wide drop-shadow-sm">GEMARI DIGITAL</h1>
+                    <p class="text-[10px] sm:text-[11px] font-inter text-white/70 uppercase tracking-widest mt-1">BPK Perwakilan Prov. Jambi</p>
+                </div>
+
+                <!-- CARD FORM -->
+                <div class="bg-white rounded-[1.5rem] shadow-2xl p-6 sm:p-10 lg:p-0 lg:shadow-none lg:bg-transparent">
+                    <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold font-geist text-slate-900 mb-2">Selamat Datang!</h2>
+                    <p class="text-sm sm:text-base text-slate-500 font-inter mb-8 sm:mb-10">Silakan masuk menggunakan kredensial Anda.</p>
 
                 <form method="POST" action="{{ route('login') }}" class="space-y-6">
                     @csrf
@@ -137,11 +149,16 @@
                         </button>
                     </div>
                 </form>
+                </div> <!-- End of Card Form -->
             </div>
             
             <!-- Footer Form Area -->
-            <div class="w-full text-[11px] text-slate-400 text-center font-inter py-6">
-                &copy; {{ date('Y') }} BPK Perwakilan Provinsi Jambi. Hak Cipta Dilindungi.
+            <div class="w-full text-[11px] text-white/50 lg:text-slate-400 text-center font-inter py-6 relative z-10 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2">
+                <span>&copy; {{ date('Y') }} BPK Perwakilan Provinsi Jambi.</span>
+                <span class="hidden sm:inline opacity-40">&bull;</span>
+                <button type="button" onclick="showDevInfo()" class="hover:underline hover:text-white lg:hover:text-teal-600 transition-colors cursor-pointer opacity-70 hover:opacity-100 focus:outline-none inline-flex items-center gap-1" title="Informasi Pembuat Aplikasi">
+                    Developed by <strong>Farhan</strong>
+                </button>
             </div>
         </div>
 
@@ -149,6 +166,66 @@
     
     <!-- Global Toast Notification -->
     @include('components.toast')
+
+    <!-- SweetAlert2 & Script Developer Info -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function showDevInfo() {
+            Swal.fire({
+                title: '<div class="flex items-center justify-center gap-2 text-slate-800 font-geist font-bold text-lg"><span>Informasi Pengembang</span></div>',
+                html: `
+                    <div class="text-left font-inter text-sm pt-2">
+                        <!-- Developer Card -->
+                        <div class="p-4 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 rounded-2xl flex items-center gap-3.5 mb-4 shadow-sm">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center font-geist font-bold text-xl shadow-md shrink-0">
+                                F
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 font-geist text-base leading-tight">Farhan</h4>
+                                <p class="text-xs text-teal-700 font-medium mt-0.5">Developer & System Creator</p>
+                            </div>
+                        </div>
+
+                        <!-- Info Meta -->
+                        <div class="space-y-2 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mb-3">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Aplikasi</span>
+                                <span class="font-bold text-slate-700">GEMARI DIGITAL v2.0</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Instansi</span>
+                                <span class="font-semibold text-slate-700">BPK Perwakilan Provinsi Jambi</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Unit / Penempatan</span>
+                                <span class="font-semibold text-slate-700">Subbagian SDM</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-400">Tahun</span>
+                                <span class="font-semibold text-slate-700">2026</span>
+                            </div>
+                        </div>
+
+                        <!-- Deskripsi -->
+                        <div class="text-center p-3 rounded-lg bg-teal-500/5 border border-teal-500/10">
+                            <p class="text-[11.5px] text-slate-500 leading-relaxed italic">
+                                "Sistem ini dirancang dan dikembangkan untuk mempermudah instansi dalam mengelola administrasi, verifikasi berkas, dan operasional peserta magang & PKL secara digital terpadu."
+                            </p>
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#0d9488',
+                heightAuto: false,
+                scrollbarPadding: false,
+                customClass: {
+                    popup: 'rounded-2xl shadow-2xl border border-slate-100',
+                    confirmButton: 'px-6 py-2 rounded-xl text-sm font-semibold font-geist'
+                }
+            });
+        }
+        console.log("%c GEMARI DIGITAL %c Developed by Farhan - BPK Perwakilan Prov. Jambi ", "background:#0d9488;color:#fff;padding:3px 6px;border-radius:4px 0 0 4px;font-weight:bold;", "background:#0f172a;color:#94a3b8;padding:3px 6px;border-radius:0 4px 4px 0;font-weight:medium;");
+    </script>
 </body>
 </html>
 

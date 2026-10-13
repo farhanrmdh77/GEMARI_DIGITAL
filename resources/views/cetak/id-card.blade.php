@@ -49,7 +49,7 @@
     <div class="id-card-container flex flex-col items-center">
         
         <!-- Bagian Atas (Header Biru BPK) -->
-        <div class="w-full bg-[#034c7a] h-[30mm] flex flex-col items-center pt-[3mm] relative rounded-b-[16px] shadow-sm z-10">
+        <div class="w-full h-[30mm] flex flex-col items-center pt-[3mm] relative rounded-b-[16px] shadow-sm z-10" style="background-color: {{ ($data->jenis_magang ?? 'Reguler') == 'Berbayar' ? '#047857' : '#034c7a' }};">
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo BPK" class="h-[14mm] max-w-[45mm] object-contain drop-shadow-md mb-1">
             <!-- Teks BPK RI diubah menjadi BPK PERWAKILAN PROVINSI JAMBI -->
             <h2 class="text-white text-[7px] font-bold tracking-wider text-center leading-tight">BPK PERWAKILAN<br>PROVINSI JAMBI</h2>
@@ -79,7 +79,7 @@
         </div>
 
         <!-- Bagian Bawah -->
-        <div class="w-full bg-[#034c7a] h-[6mm] flex items-center justify-center mt-auto text-white shadow-[0_-2px_4px_rgba(0,0,0,0.1)]">
+        <div class="w-full h-[6mm] flex items-center justify-center mt-auto text-white shadow-[0_-2px_4px_rgba(0,0,0,0.1)]" style="background-color: {{ ($data->jenis_magang ?? 'Reguler') == 'Berbayar' ? '#047857' : '#034c7a' }};">
             <p class="text-[6.5px] font-bold tracking-widest">{{ \Carbon\Carbon::parse($data->tgl_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($data->tgl_selesai)->format('d M Y') }}</p>
         </div>
     </div>

@@ -267,23 +267,23 @@
                 <table class="w-full text-left border-collapse whitespace-nowrap">
                     <thead>
                         <tr class="bg-slate-50 border-b border-slate-200">
-                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-16">ID</th>
-                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist">Nama Instansi</th>
-                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-32">Jenis</th>
-                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist text-right w-24">Aksi</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-16 text-left">No.</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist text-left">Nama Instansi</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist w-32 text-center">Jenis</th>
+                            <th class="px-5 py-3 text-xs font-semibold text-slate-500 uppercase tracking-wider font-geist text-center w-24">Aksi</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-slate-100">
-                        <template x-for="inst in paginatedData" :key="inst.id">
+                        <template x-for="(inst, index) in paginatedData" :key="inst.id">
                             <tr class="hover:bg-slate-50/50 transition-colors">
-                                <td class="px-5 py-4 text-sm text-slate-600 font-inter" x-text="inst.id"></td>
+                                <td class="px-5 py-4 text-sm text-slate-600 font-inter" x-text="(startRecord - 1) + index + 1"></td>
                                 <td class="px-5 py-4 text-sm text-slate-800 font-medium font-inter" x-text="inst.nama_instansi"></td>
-                                <td class="px-5 py-4 text-sm font-inter">
+                                <td class="px-5 py-4 text-sm font-inter text-center">
                                     <span class="px-2.5 py-1 rounded-md text-xs font-medium" 
                                           :class="inst.jenis === 'Sekolah' ? 'bg-blue-50 text-blue-700' : 'bg-purple-50 text-purple-700'" 
                                           x-text="inst.jenis"></span>
                                 </td>
-                                <td class="px-5 py-4 text-sm text-right">
+                                <td class="px-5 py-4 text-sm text-center">
                                     <button type="button" @click="deleteInstansi(inst.id, inst.nama_instansi)" class="text-red-500 hover:text-red-700 font-medium text-xs transition-colors p-1.5 hover:bg-red-50 rounded-md">
                                         Hapus
                                     </button>

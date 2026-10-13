@@ -45,16 +45,22 @@
     
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        html.swal2-shown, body.swal2-shown {
+            height: 100% !important;
+            overflow: hidden !important;
+        }
+    </style>
 
     @stack('styles')
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased overflow-hidden flex h-screen" x-data="{ sidebarOpen: false }">
 
     <!-- ================= SIDEBAR (GRADIENT EMERALD TEGAS) ================= -->
-    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-50 w-[280px] bg-gradient-to-b from-sidebar-top to-sidebar-bottom transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 flex flex-col shadow-xl">
+    <aside :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-50 w-[280px] bg-gradient-to-b from-sidebar-top to-sidebar-bottom transition-transform duration-300 lg:translate-x-0 lg:static lg:inset-0 flex flex-col shadow-xl h-screen max-h-screen shrink-0">
         
         <!-- Header Sidebar: Logo & Title -->
-        <div class="px-6 py-8 flex items-center gap-4 border-b border-white/5">
+        <div class="px-6 py-8 flex items-center gap-4 border-b border-white/5 shrink-0">
             <img src="{{ asset('assets/img/logo.png') }}" alt="Logo GEMARI DIGITAL" class="w-14 h-14 object-contain">
             <div class="flex flex-col">
                 <span class="font-geist font-bold text-[19px] text-white tracking-wide leading-tight">GEMARI DIGITAL</span>
@@ -63,7 +69,7 @@
         </div>
 
         <!-- Menu Navigasi Utama -->
-        <nav class="flex-1 overflow-y-auto px-4 mt-6">
+        <nav class="flex-1 overflow-y-auto px-4 mt-6 min-h-0">
             <!-- Label Navigasi Dipertebal -->
             <p class="px-3 text-[11px] font-bold font-geist text-white/50 uppercase tracking-widest mb-3">Navigasi Utama</p>
             
@@ -115,16 +121,20 @@
             </ul>
         </nav>
 
-        @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
-        <!-- Bottom Area: Pengaturan (Dipisah Sempurna di Bawah) -->
-        <div class="px-4 py-6 mt-auto border-t border-white/10">
-            <p class="px-3 text-[11px] font-bold font-geist text-white/50 uppercase tracking-widest mb-3">Sistem</p>
-            <a href="{{ route('pengaturan.index') }}" class="flex items-center px-4 py-3.5 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('pengaturan.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
+        <!-- Bottom Area: Pengaturan & Watermark Developer -->
+        <div class="px-4 py-4 mt-auto border-t border-white/10 shrink-0">
+            @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
+            <p class="px-3 text-[11px] font-bold font-geist text-white/50 uppercase tracking-widest mb-2">Sistem</p>
+            <a href="{{ route('pengaturan.index') }}" class="flex items-center px-4 py-3 rounded-xl text-sm font-semibold font-geist transition-all duration-300 {{ request()->routeIs('pengaturan.*') ? 'bg-gradient-to-r from-teal-500/90 to-teal-400/80 backdrop-blur-md text-white shadow-lg border border-white/10' : 'text-white/70 hover:bg-white/10 hover:text-white hover:translate-x-1' }}">
                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                 Pengaturan
             </a>
+            @endif
+            <div class="mt-3 px-3 flex items-center justify-between text-[10px] text-white/30 font-inter">
+                <span>GEMARI DIGITAL v2.0</span>
+                <button type="button" onclick="showDevInfo()" class="hover:text-white/80 transition-colors cursor-pointer focus:outline-none" title="Informasi Pembuat Aplikasi">Dev by Farhan</button>
+            </div>
         </div>
-        @endif
     </aside>
 
     <!-- Overlay Mobile -->
@@ -184,10 +194,27 @@
     @include('components.toast')
 
         <!-- Main Content Scrollable Area -->
-        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div class="max-w-[1440px] mx-auto">
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 flex flex-col justify-between">
+            <div class="max-w-[1440px] mx-auto w-full mb-8">
                 @yield('content')
             </div>
+
+            <!-- Footer Aplikasi Tersembunyi (Discreet Footer) -->
+            <footer class="mt-auto pt-6 border-t border-slate-200/80 max-w-[1440px] mx-auto w-full flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400 font-inter">
+                <div class="flex items-center gap-2">
+                    <span>&copy; {{ date('Y') }} <span class="font-semibold text-slate-600">GEMARI DIGITAL</span></span>
+                    <span class="text-slate-300">&bull;</span>
+                    <span class="text-slate-500">BPK Perwakilan Provinsi Jambi</span>
+                </div>
+                
+                <div class="flex items-center gap-2">
+                    <!-- Subtle Developer Badge / Modal Trigger -->
+                    <button type="button" onclick="showDevInfo()" class="group inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 hover:bg-teal-50 border border-slate-200 hover:border-teal-200 text-slate-400 hover:text-teal-700 transition-all duration-200 cursor-pointer focus:outline-none" title="Klik untuk informasi pembuat aplikasi">
+                        <span class="w-1.5 h-1.5 rounded-full bg-slate-300 group-hover:bg-teal-500 transition-colors"></span>
+                        <span class="text-[11px] font-medium tracking-tight">Developed by <span class="font-semibold text-slate-600 group-hover:text-teal-700 transition-colors">Farhan</span></span>
+                    </button>
+                </div>
+            </footer>
         </main>
     </div>
 
@@ -256,6 +283,63 @@
                 });
             });
         });
+
+        // Modal Informasi Pengembang (Developer Credits)
+        function showDevInfo() {
+            Swal.fire({
+                title: '<div class="flex items-center justify-center gap-2 text-slate-800 font-geist font-bold text-lg"><span>Informasi Pengembang</span></div>',
+                html: `
+                    <div class="text-left font-inter text-sm pt-2">
+                        <!-- Developer Card -->
+                        <div class="p-4 bg-gradient-to-r from-teal-50 to-emerald-50 border border-teal-100 rounded-2xl flex items-center gap-3.5 mb-4 shadow-sm">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-teal-600 to-emerald-500 text-white flex items-center justify-center font-geist font-bold text-xl shadow-md shrink-0">
+                                F
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 font-geist text-base leading-tight">Farhan</h4>
+                                <p class="text-xs text-teal-700 font-medium mt-0.5">Developer & System Creator</p>
+                            </div>
+                        </div>
+
+                        <!-- Info Meta -->
+                        <div class="space-y-2 text-xs text-slate-600 bg-slate-50 p-3.5 rounded-xl border border-slate-100 mb-3">
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Aplikasi</span>
+                                <span class="font-bold text-slate-700">GEMARI DIGITAL v2.0</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Instansi</span>
+                                <span class="font-semibold text-slate-700">BPK Perwakilan Provinsi Jambi</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1 border-b border-slate-200/50">
+                                <span class="text-slate-400">Unit / Penempatan</span>
+                                <span class="font-semibold text-slate-700">Subbagian SDM</span>
+                            </div>
+                            <div class="flex justify-between items-center py-1">
+                                <span class="text-slate-400">Tahun</span>
+                                <span class="font-semibold text-slate-700">2026</span>
+                            </div>
+                        </div>
+
+                        <!-- Deskripsi -->
+                        <div class="text-center p-3 rounded-lg bg-teal-500/5 border border-teal-500/10">
+                            <p class="text-[11.5px] text-slate-500 leading-relaxed italic">
+                                "Sistem ini dirancang dan dikembangkan untuk mempermudah instansi dalam mengelola administrasi, verifikasi berkas, dan operasional peserta magang & PKL secara digital terpadu."
+                            </p>
+                        </div>
+                    </div>
+                `,
+                confirmButtonText: 'Tutup',
+                confirmButtonColor: '#0d9488',
+                heightAuto: false,
+                scrollbarPadding: false,
+                customClass: {
+                    popup: 'rounded-2xl shadow-2xl border border-slate-100',
+                    confirmButton: 'px-6 py-2 rounded-xl text-sm font-semibold font-geist'
+                }
+            });
+        }
+        console.log("%c GEMARI DIGITAL %c Developed by Farhan - BPK Perwakilan Prov. Jambi ", "background:#0d9488;color:#fff;padding:3px 6px;border-radius:4px 0 0 4px;font-weight:bold;", "background:#0f172a;color:#94a3b8;padding:3px 6px;border-radius:0 4px 4px 0;font-weight:medium;");
     </script>
 
     @stack('scripts')

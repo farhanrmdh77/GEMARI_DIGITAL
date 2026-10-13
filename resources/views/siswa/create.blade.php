@@ -201,7 +201,6 @@
                     </div>
                 </div>
             </div>
-            </div>
 
             <!-- ================= SEKSI 4: DOKUMEN MAGANG ================= -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 border-t border-slate-100 pt-8 mt-4">

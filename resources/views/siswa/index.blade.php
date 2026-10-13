@@ -4,62 +4,64 @@
 
 @section('content')
 <!-- Header Utama -->
-<div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
     <div>
-        <h2 class="text-2xl font-bold font-geist text-slate-800">Manajemen Data Siswa</h2>
+        <h2 class="text-2xl font-bold font-geist text-slate-800 tracking-tight">Manajemen Data Siswa</h2>
         <p class="text-sm text-slate-500 font-inter mt-1">Kelola data siswa sekolah menengah (SMA/SMK/Sederajat) yang terdaftar di instansi.</p>
     </div>
-    <!-- Search Input -->
-    <div class="relative w-full md:w-72 shrink-0">
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg class="h-4 w-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
-        </div>
-        <input type="text" id="searchInput" class="block w-full pl-9 pr-3 py-2.5 bg-white border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/40 outline-none transition-all font-inter shadow-sm" placeholder="Cari nama atau NIS...">
-    </div>
-</div>
-
-<!-- Toolbar: Real-time Filter -->
-<div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 p-4 mb-8 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-    <div class="flex flex-col md:flex-row flex-wrap items-center gap-3 w-full lg:flex-1">
-        <!-- Filter Status -->
-        <select id="statusFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
-            <option value="all">Semua Status</option>
-            <option value="Aktif">Aktif</option>
-            <option value="Akan Masuk">Akan Masuk</option>
-            <option value="Selesai">Selesai</option>
-        </select>
-
-        <!-- Filter Gender -->
-        <select id="genderFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
-            <option value="all">Semua Gender</option>
-            <option value="L">Laki-laki</option>
-            <option value="P">Perempuan</option>
-        </select>
-
-        <!-- Filter Sekolah -->
-        <select id="instansiFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
-            <option value="all">Semua Sekolah</option>
-            @foreach($instansis as $instansi)
-                <option value="{{ strtolower($instansi->nama_instansi) }}">{{ $instansi->nama_instansi }}</option>
-            @endforeach
-        </select>
-
-        <!-- Filter Jenis Magang -->
-        <select id="jenisMagangFilter" class="w-full md:w-auto bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-600 focus:border-primary outline-none cursor-pointer font-inter">
-            <option value="all">Semua Jenis Magang</option>
-            <option value="reguler">Magang Reguler</option>
-            <option value="berbayar">Magang Berbayar</option>
-        </select>
-    </div>
-
-    <!-- Tambah Button -->
-    <!-- Tambah Button -->
+    
     @if(Auth::check() && in_array(Auth::user()->role, ['Superadmin', 'Admin Humas']))
-    <a href="{{ route('siswa.create') }}" class="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-medium font-geist rounded-lg px-5 py-2 text-sm transition-colors shadow-sm focus:ring-2 focus:ring-primary/40 whitespace-nowrap">
-        <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+    <a href="{{ route('siswa.create') }}" class="inline-flex items-center justify-center bg-primary hover:bg-primary-hover text-white font-semibold font-geist rounded-xl px-5 py-2.5 text-sm transition-all shadow-sm hover:shadow-md focus:ring-2 focus:ring-primary/40 whitespace-nowrap self-start sm:self-auto shrink-0">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
         Tambah Siswa
     </a>
     @endif
+</div>
+
+<!-- Toolbar: Real-time Search & Filter -->
+<div class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 p-4 mb-8">
+    <div class="flex flex-col lg:flex-row items-stretch lg:items-center gap-3">
+        <!-- Search Input -->
+        <div class="relative flex-1 min-w-[220px]">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </div>
+            <input type="text" id="searchInput" class="block w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all font-inter" placeholder="Cari nama atau NIS...">
+        </div>
+
+        <!-- Filter Dropdowns Container -->
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap lg:flex-nowrap items-center gap-2.5">
+            <!-- Filter Status -->
+            <select id="statusFilter" class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer font-inter transition-all">
+                <option value="all">Semua Status</option>
+                <option value="Aktif">Aktif</option>
+                <option value="Akan Masuk">Akan Masuk</option>
+                <option value="Selesai">Selesai</option>
+            </select>
+
+            <!-- Filter Gender -->
+            <select id="genderFilter" class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer font-inter transition-all">
+                <option value="all">Semua Gender</option>
+                <option value="L">Laki-laki</option>
+                <option value="P">Perempuan</option>
+            </select>
+
+            <!-- Filter Sekolah -->
+            <select id="instansiFilter" class="w-full sm:w-auto max-w-full sm:max-w-[200px] truncate bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer font-inter transition-all">
+                <option value="all">Semua Sekolah</option>
+                @foreach($instansis as $instansi)
+                    <option value="{{ strtolower($instansi->nama_instansi) }}">{{ $instansi->nama_instansi }}</option>
+                @endforeach
+            </select>
+
+            <!-- Filter Jenis Magang -->
+            <select id="jenisMagangFilter" class="w-full sm:w-auto bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-medium text-slate-700 hover:bg-slate-100 focus:bg-white focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none cursor-pointer font-inter transition-all">
+                <option value="all">Semua Jenis</option>
+                <option value="reguler">Reguler</option>
+                <option value="berbayar">Berbayar</option>
+            </select>
+        </div>
+    </div>
 </div>
 
 <!-- ================= GRID CARD VIEW ================= -->

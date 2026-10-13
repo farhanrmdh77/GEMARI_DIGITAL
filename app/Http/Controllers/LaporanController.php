@@ -17,14 +17,20 @@ class LaporanController extends Controller
         $status = $request->input('status', 'semua');
         $tgl_mulai = $request->input('tgl_mulai');
         $tgl_akhir = $request->input('tgl_akhir');
+        $jenis_magang = $request->input('jenis_magang', 'semua');
         $action = $request->input('action'); // 'preview' atau 'cetak'
 
         $data = collect();
         $today = Carbon::today()->toDateString();
 
         // Fungsi bantuan (closure) agar logika filter tidak ditulis berulang-ulang
-        $applyFilters = function($query) use ($status, $today, $tgl_mulai, $tgl_akhir) {
+        $applyFilters = function($query) use ($status, $today, $tgl_mulai, $tgl_akhir, $jenis_magang) {
             
+            // Filter Jenis Magang
+            if ($jenis_magang !== 'semua') {
+                $query->where('jenis_magang', $jenis_magang);
+            }
+
             // Filter Status
             if ($status == 'aktif') {
                 $query->whereNotNull('tgl_mulai')
@@ -83,7 +89,7 @@ class LaporanController extends Controller
             $setting = Setting::first(); 
             
             // Tambahkan $setting ke dalam fungsi compact()
-            return view('laporan.cetak', compact('data', 'kategori', 'status', 'tgl_mulai', 'tgl_akhir', 'setting'));
+            return view('laporan.cetak', compact('data', 'kategori', 'status', 'tgl_mulai', 'tgl_akhir', 'setting', 'jenis_magang'));
         }
 
         // Jika hanya preview atau muat awal, tampilkan di index
@@ -97,6 +103,7 @@ class LaporanController extends Controller
         
         $kategori = $request->input('kategori', 'semua');
         $status = $request->input('status', 'semua');
+        $jenis_magang = $request->input('jenis_magang', 'semua');
         $tgl_mulai = $request->input('tgl_mulai');
         $tgl_akhir = $request->input('tgl_akhir');
         
@@ -111,7 +118,12 @@ class LaporanController extends Controller
         $today = Carbon::today()->toDateString();
 
         // Fungsi bantuan filter untuk calendar
-        $applyFilters = function($query) use ($status, $today, $tgl_mulai, $tgl_akhir, $start, $end) {
+        $applyFilters = function($query) use ($status, $today, $tgl_mulai, $tgl_akhir, $start, $end, $jenis_magang) {
+            // Filter Jenis Magang
+            if ($jenis_magang !== 'semua') {
+                $query->where('jenis_magang', $jenis_magang);
+            }
+
             // Filter rentang waktu yang terlihat di kalender
             $query->whereNotNull('tgl_mulai')
                   ->whereNotNull('tgl_selesai')
